@@ -55,8 +55,8 @@
 
     // 创建立方体
     var cubeList = [];
-    for (let x = -8; x < 8; x++) {
-        for (let z = -8; z < 8; z++) {
+    for (let x = -16; x < 16; x++) {
+        for (let z = -16; z < 16; z++) {
             var cube = new THREE.Mesh(geometry, material);
             cube.position.set(x, z, 0);
             scene.add(cube);
@@ -65,7 +65,7 @@
     }
 
     // 设置相机位置
-    camera.position.z = 10;
+    camera.position.z = 32;
 
     var currentRed = 1;
     var currentBlue = 0;
