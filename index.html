@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Render</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<script src="https://threejs.org/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stats.js@latest"></script>
+<script>
+
+    // 创建场景
+    var scene = new THREE.Scene();
+
+    // 创建相机
+    var camera = new THREE.PerspectiveCamera(
+        75, // 相机视角
+        window.innerWidth / window.innerHeight, // 相机宽高比
+        0.1, // 相机近面
+        1000 // 相机远面
+    );
+
+    // 创建渲染器
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xffffff); // 设置背景颜色为白色
+    renderer.antialias = true;
+    document.body.appendChild(renderer.domElement);
+
+    // 创建立方体几何
+    var geometry = new THREE.BoxGeometry(1, 1, 1, 512, 512, 512);
+
+    // 创建立方体材质
+    var material = new THREE.MeshBasicMaterial({
+        color: 0x0000ff, // 立方体颜色
+        transparent: true, // 立方体是否透明
+        opacity: 0.5 // 立方体透明度
+    });
+
+
+    var material = new THREE.MeshBasicMaterial({
+        color: 0xffff00,
+        transparent: true,
+        opacity: 0.5
+    });
+
+    // 创建立方体
+    var cubeList = [];
+    for (let x = -8; x < 8; x++) {
+        for (let z = -8; z < 8; z++) {
+            var cube = new THREE.Mesh(geometry, material);
+            cube.position.set(x, z, 0);
+            scene.add(cube);
+            cubeList.push(cube);
+        }
+    }
+
+    // 设置相机位置
+    camera.position.z = 10;
+
+    var currentRed = 1;
+    var currentBlue = 0;
+    var currentGreen = 0;
+    var tempRed = 255;
+    var tempBlue = 0;
+    var tempGreen = 0;
+    var speed = 8;
+    var rainbowTick = speed;
+    setInterval(function () {
+        material.color.setRGB(currentRed, currentGreen, currentBlue);
+        if (rainbowTick === 0) {
+            if (tempRed > 0 && tempBlue === 0) {
+                tempRed = tempRed - 5;
+                tempGreen = tempGreen + 5;
+                currentRed = (1 / 255) * tempRed;
+                currentGreen = (1 / 255) * tempGreen;
+                currentBlue = (1 / 255) * tempBlue;
+            }
+            if (tempGreen > 0 && tempRed === 0) {
+                tempGreen = tempGreen - 5;
+                tempBlue = tempBlue + 5;
+                currentRed = (1 / 255) * tempRed;
+                currentGreen = (1 / 255) * tempGreen;
+                currentBlue = (1 / 255) * tempBlue;
+            }
+            if (tempBlue > 0 && tempGreen === 0) {
+                tempRed = tempRed + 5;
+                tempBlue = tempBlue - 5;
+                currentRed = (1 / 255) * tempRed;
+                currentGreen = (1 / 255) * tempGreen;
+                currentBlue = (1 / 255) * tempBlue;
+            }
+            rainbowTick = speed;
+        } else {
+            rainbowTick--
+        }
+
+    }, 1);
+
+
+    // 更新立方体的旋转角度
+    function updateRotation() {
+        for (let i in cubeList) {
+            var cube = cubeList[i];
+            cube.rotation.x += 0.005;
+            cube.rotation.y += 0.005;
+            cube.rotation.z += 0.005;
+        }
+    }
+
+    // 渲染场景
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // 更新立方体的旋转角度
+        updateRotation();
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // 创建Stats对象
+    var stats = new Stats();
+
+    // 将Stats对象添加到页面中
+    document.body.appendChild(stats.dom);
+
+    // 渲染循环
+    function render() {
+        // 更新Stats对象
+        stats.update();
+
+        // 渲染场景
+        renderer.render(scene, camera);
+
+        // 循环渲染
+        requestAnimationFrame(index);
+    }
+
+    // 开始渲染
+    index();
+
+
+
+</script>
+</body>
+</html>
